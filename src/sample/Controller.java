@@ -5,16 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ResourceBundle;
 
 @ClientEndpoint
@@ -29,8 +26,8 @@ public class Controller implements Initializable {
     @FXML
     private TextArea textArea;
 
-    private Session session; //
-    private WebSocketContainer container; //
+    private Session session;
+    private WebSocketContainer container;
 
     public Controller() {
 
@@ -65,7 +62,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        URI uri = URI.create("ws://localhost:8080/chat"); //adres WebSocketu
+        URI uri = URI.create("ws://localhost:8080/chat"); //WebSocket's address
 //        URI uri = URI.create("ws://5.135.218.27:8081/chat");
         container = ContainerProvider.getWebSocketContainer(); //przypisany silnik implementujący narzędzie dla WebSocketu
         try {
@@ -78,10 +75,18 @@ public class Controller implements Initializable {
 
         sendMessage.setOnMouseClicked(e -> sendMessage(getTextFromField()));
 
+        /*
+        Methods for sending the message and clear the message text area.
+         */
         textMessage.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                sendMessage(getTextFromField());
+                sendMessage(textMessage.getText());
+            }
+        });
 
+        textMessage.setOnKeyReleased(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                textMessage.clear();
             }
         });
 
